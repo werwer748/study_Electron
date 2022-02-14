@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, hashHistory } from "react-router";
+import { hashHistory } from "react-router";
 import RoomItem from "./RoomItem";
 import firebase from "firebase/firebase-browser";
 
@@ -17,68 +17,69 @@ const BUTTON_STYLE = {
 };
 
 export default class Rooms extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            roomName: "",
-            rooms: []
-        };
-        this.db = firebase.database();
-        this.handleOnChangeRoomName = this.handleOnChangeRoomName.bind(this);
-        this.handleOnSubmit = this.handleOnSubmit.bind(this);
-    }
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //         roomName: "",
+    //         rooms: []
+    //     };
+    //     this.db = firebase.database();
+    //     this.handleOnChangeRoomName = this.handleOnChangeRoomName.bind(this);
+    //     this.handleOnSubmit = this.handleOnSubmit.bind(this);
+    // }
 
-    componentDidMount() {
-        //컴포넌트 초기화 시 채팅방 목록 추출
-        this.fetchRooms();
-    }
+    // componentDidMount() {
+    //     //컴포넌트 초기화 시 채팅방 목록 추출
+    //     this.fetchRooms();
+    // }
 
-    handleOnChangeRoomName(e){
-        this.setState({
-            roomName: e.target.value
-        });
-    }
+    // handleOnChangeRoomName(e) {
+    //     this.setState({
+    //         roomName: e.target.value
+    //     });
+    // }
 
-    //새 채팅방 만들기
-    handleOnSubmit(e) {
-        const { roomName } = this.state;
-        e.preventDefault();
-        if (!roomName.length) {
-            return;
-        }
+    // //새 채팅방 만들기
+    // handleOnSubmit(e) {
+    //     const { roomName } = this.state;
+    //     e.preventDefault();
+    //     if (!roomName.length) {
+    //         return;
+    //     }
 
-        // Firebase 데이터베이스에 새로운 채팅방 만들기
-        const newRoomRef = this.db.ref("/chatrooms").push();
-        const newRoom = {
-            description: roomName
-        };
+    //     // Firebase 데이터베이스에 새로운 채팅방 만들기
+    //     const newRoomRef = this.db.ref("/chatrooms").push();
+    //     const newRoom = {
+    //         description: roomName
+    //     };
 
-        // 생성한 채팅방의 description 변경하기
-        newRoomRef.update(newRoom)
-        .then(() => {
-            // 상태를 다시 초기화
-            this.setState({ roomName: "" });
-            return this.fetchRooms()
-            .then(() => {
-                hashHistory.push(`/rooms/${newRoomRef.key}`);
-            });
-        });
-    }
+    //     // 생성한 채팅방의 description 변경하기
+    //     newRoomRef.update(newRoom)
+    //     .then(() => {
+    //         // 상태를 다시 초기화
+    //         this.setState({ roomName: "" });
+    //         // 채팅방 목록 다시 가져오기
+    //         return this.fetchRooms()
+    //         .then(() => {
+    //             hashHistory.push(`/rooms/${newRoomRef.key}`);
+    //         });
+    //     });
+    // }
     
-    //채팅방 목록 추출 처리
-    fetchRooms() {
-        //Firebase 데이터베이스에서 채팅방 20개 가져오기
-        return this.db.ref("/chatrooms").limitToLast(20).once("value")
-        .then(snapshot => {
-            const rooms = [];
-            snapshot.forEach(item => {
-                //DB에서 추출한 데이터 객체로 할당
-                rooms.push(Object.assign({ key: item.key }, item.val()));
-            });
-            // 가져온 객체 배열을 컴포넌트 state에 설정
-            this.setState({ rooms })
-        })
-    };
+    // //채팅방 목록 추출 처리
+    // fetchRooms() {
+    //     //Firebase 데이터베이스에서 채팅방 20개 가져오기
+    //     return this.db.ref("/chatrooms").limitToLast(20).once("value")
+    //     .then(snapshot => {
+    //         const rooms = [];
+    //         snapshot.forEach(item => {
+    //             //DB에서 추출한 데이터 객체로 할당
+    //             rooms.push(Object.assign({ key: item.key }, item.val()));
+    //         });
+    //         // 가져온 객체 배열을 컴포넌트 state에 설정
+    //         this.setState({ rooms });
+    //     })
+    // };
 
     //왼쪽 채팅방 목록 렌더링
     renderRoomList() {
@@ -117,7 +118,7 @@ export default class Rooms extends React.Component {
                         <span className="icon icon-chat" />
                     </div>
                     <p>
-                        채팅방 참여하세요~
+                        채팅방 참여하거나 새로운 채팅방을 만들어보세요
                     </p>
                 </div>
             )
@@ -126,24 +127,9 @@ export default class Rooms extends React.Component {
 
     render(){
         return (
-            <div>
-                <h2>Rooms</h2>
-                <ul>
-                    <li><Link to="/rooms/1">Room 1</Link></li>
-                    <li><Link to="/rooms/2">Room 2</Link></li>
-                </ul> <br />
-                <div>{this.props.children}</div> <br />
-                <div>
-                    <Link to="/login">
-                        <button
-                            type="button"
-                            style={CANCEL_BUTTON_STYLE}
-                            className="btn btn-large btn-default"
-                        >
-                            취소
-                        </button>
-                    </Link>
-                </div>
+            <div className="pane-group">
+                {/* <div className="pane-sm sidebar">{this.renderRoomList()}</div> */}
+                <div className="pane">{this.renderRoom()}</div>
             </div>
         );
     };

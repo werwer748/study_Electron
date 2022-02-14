@@ -45,7 +45,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
 //Application 렌더링
 render(appRouting, document.getElementById("app"));

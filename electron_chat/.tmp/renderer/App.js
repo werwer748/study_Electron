@@ -70,7 +70,7 @@ var firebaseConfig = {
 };
 
 // Initialize Firebase
-var app = (0, _app.initializeApp)(firebaseConfig);
+(0, _app.initializeApp)(firebaseConfig);
 
 //Application 렌더링
 (0, _reactDom.render)(appRouting, document.getElementById("app"));

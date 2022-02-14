@@ -44,86 +44,78 @@ var BUTTON_STYLE = {
 var Rooms = function (_React$Component) {
     _inherits(Rooms, _React$Component);
 
-    function Rooms(props) {
+    function Rooms() {
         _classCallCheck(this, Rooms);
 
-        var _this = _possibleConstructorReturn(this, (Rooms.__proto__ || Object.getPrototypeOf(Rooms)).call(this, props));
-
-        _this.state = {
-            roomName: "",
-            rooms: []
-        };
-        _this.db = _firebaseBrowser2.default.database();
-        _this.handleOnChangeRoomName = _this.handleOnChangeRoomName.bind(_this);
-        _this.handleOnSubmit = _this.handleOnSubmit.bind(_this);
-        return _this;
+        return _possibleConstructorReturn(this, (Rooms.__proto__ || Object.getPrototypeOf(Rooms)).apply(this, arguments));
     }
 
     _createClass(Rooms, [{
-        key: "componentDidMount",
-        value: function componentDidMount() {
-            //컴포넌트 초기화 시 채팅방 목록 추출
-            this.fetchRooms();
-        }
-    }, {
-        key: "handleOnChangeRoomName",
-        value: function handleOnChangeRoomName(e) {
-            this.setState({
-                roomName: e.target.value
-            });
-        }
-
-        //새 채팅방 만들기
-
-    }, {
-        key: "handleOnSubmit",
-        value: function handleOnSubmit(e) {
-            var _this2 = this;
-
-            var roomName = this.state.roomName;
-
-            e.preventDefault();
-            if (!roomName.length) {
-                return;
-            }
-
-            // Firebase 데이터베이스에 새로운 채팅방 만들기
-            var newRoomRef = this.db.ref("/chatrooms").push();
-            var newRoom = {
-                description: roomName
-            };
-
-            // 생성한 채팅방의 description 변경하기
-            newRoomRef.update(newRoom).then(function () {
-                // 상태를 다시 초기화
-                _this2.setState({ roomName: "" });
-                return _this2.fetchRooms().then(function () {
-                    _reactRouter.hashHistory.push("/rooms/" + newRoomRef.key);
-                });
-            });
-        }
-
-        //채팅방 목록 추출 처리
-
-    }, {
-        key: "fetchRooms",
-        value: function fetchRooms() {
-            var _this3 = this;
-
-            //Firebase 데이터베이스에서 채팅방 20개 가져오기
-            return this.db.ref("/chatrooms").limitToLast(20).once("value").then(function (snapshot) {
-                var rooms = [];
-                snapshot.forEach(function (item) {
-                    //DB에서 추출한 데이터 객체로 할당
-                    rooms.push(Object.assign({ key: item.key }, item.val()));
-                });
-                // 가져온 객체 배열을 컴포넌트 state에 설정
-                _this3.setState({ rooms: rooms });
-            });
-        }
-    }, {
         key: "renderRoomList",
 
+        // constructor(props) {
+        //     super(props);
+        //     this.state = {
+        //         roomName: "",
+        //         rooms: []
+        //     };
+        //     this.db = firebase.database();
+        //     this.handleOnChangeRoomName = this.handleOnChangeRoomName.bind(this);
+        //     this.handleOnSubmit = this.handleOnSubmit.bind(this);
+        // }
+
+        // componentDidMount() {
+        //     //컴포넌트 초기화 시 채팅방 목록 추출
+        //     this.fetchRooms();
+        // }
+
+        // handleOnChangeRoomName(e) {
+        //     this.setState({
+        //         roomName: e.target.value
+        //     });
+        // }
+
+        // //새 채팅방 만들기
+        // handleOnSubmit(e) {
+        //     const { roomName } = this.state;
+        //     e.preventDefault();
+        //     if (!roomName.length) {
+        //         return;
+        //     }
+
+        //     // Firebase 데이터베이스에 새로운 채팅방 만들기
+        //     const newRoomRef = this.db.ref("/chatrooms").push();
+        //     const newRoom = {
+        //         description: roomName
+        //     };
+
+        //     // 생성한 채팅방의 description 변경하기
+        //     newRoomRef.update(newRoom)
+        //     .then(() => {
+        //         // 상태를 다시 초기화
+        //         this.setState({ roomName: "" });
+        //         // 채팅방 목록 다시 가져오기
+        //         return this.fetchRooms()
+        //         .then(() => {
+        //             hashHistory.push(`/rooms/${newRoomRef.key}`);
+        //         });
+        //     });
+        // }
+
+        // //채팅방 목록 추출 처리
+        // fetchRooms() {
+        //     //Firebase 데이터베이스에서 채팅방 20개 가져오기
+        //     return this.db.ref("/chatrooms").limitToLast(20).once("value")
+        //     .then(snapshot => {
+        //         const rooms = [];
+        //         snapshot.forEach(item => {
+        //             //DB에서 추출한 데이터 객체로 할당
+        //             rooms.push(Object.assign({ key: item.key }, item.val()));
+        //         });
+        //         // 가져온 객체 배열을 컴포넌트 state에 설정
+        //         this.setState({ rooms });
+        //     })
+        // };
 
         //왼쪽 채팅방 목록 렌더링
         value: function renderRoomList() {
@@ -181,7 +173,7 @@ var Rooms = function (_React$Component) {
                     _react2.default.createElement(
                         "p",
                         null,
-                        "\uCC44\uD305\uBC29 \uCC38\uC5EC\uD558\uC138\uC694~"
+                        "\uCC44\uD305\uBC29 \uCC38\uC5EC\uD558\uAC70\uB098 \uC0C8\uB85C\uC6B4 \uCC44\uD305\uBC29\uC744 \uB9CC\uB4E4\uC5B4\uBCF4\uC138\uC694"
                     )
                 );
             }
@@ -191,59 +183,11 @@ var Rooms = function (_React$Component) {
         value: function render() {
             return _react2.default.createElement(
                 "div",
-                null,
-                _react2.default.createElement(
-                    "h2",
-                    null,
-                    "Rooms"
-                ),
-                _react2.default.createElement(
-                    "ul",
-                    null,
-                    _react2.default.createElement(
-                        "li",
-                        null,
-                        _react2.default.createElement(
-                            _reactRouter.Link,
-                            { to: "/rooms/1" },
-                            "Room 1"
-                        )
-                    ),
-                    _react2.default.createElement(
-                        "li",
-                        null,
-                        _react2.default.createElement(
-                            _reactRouter.Link,
-                            { to: "/rooms/2" },
-                            "Room 2"
-                        )
-                    )
-                ),
-                " ",
-                _react2.default.createElement("br", null),
+                { className: "pane-group" },
                 _react2.default.createElement(
                     "div",
-                    null,
-                    this.props.children
-                ),
-                " ",
-                _react2.default.createElement("br", null),
-                _react2.default.createElement(
-                    "div",
-                    null,
-                    _react2.default.createElement(
-                        _reactRouter.Link,
-                        { to: "/login" },
-                        _react2.default.createElement(
-                            "button",
-                            {
-                                type: "button",
-                                style: CANCEL_BUTTON_STYLE,
-                                className: "btn btn-large btn-default"
-                            },
-                            "\uCDE8\uC18C"
-                        )
-                    )
+                    { className: "pane" },
+                    this.renderRoom()
                 )
             );
         }
